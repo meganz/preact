@@ -20,7 +20,7 @@ import { applyRef } from './refs';
 export function unmount(internal, parentInternal, skipRemove) {
 	let r;
 	if (options.unmount) options.unmount(internal);
-	internal._flags |= MODE_UNMOUNTING;
+	internal.flags |= MODE_UNMOUNTING;
 
 	if ((r = internal.ref)) {
 		if (!r.current || r.current === internal._dom)
@@ -28,9 +28,9 @@ export function unmount(internal, parentInternal, skipRemove) {
 	}
 
 	let dom;
-	if (!skipRemove && internal._flags & TYPE_DOM) {
+	if (!skipRemove && internal.flags & TYPE_DOM) {
 		skipRemove = (dom = internal._dom) != null;
-	} else if (internal._flags & TYPE_ROOT) {
+	} else if (internal.flags & TYPE_ROOT) {
 		skipRemove = false;
 	}
 
@@ -40,7 +40,7 @@ export function unmount(internal, parentInternal, skipRemove) {
 	// successfully mounted as well (e.g. if it threw while mounting and a parent
 	// error boundary is rendering error UI and so is attempting to unmount this
 	// component)
-	if (internal._flags & TYPE_COMPONENT) {
+	if (internal.flags & TYPE_COMPONENT) {
 		try {
 			unmountReactComponent(internal);
 		} catch (e) {
